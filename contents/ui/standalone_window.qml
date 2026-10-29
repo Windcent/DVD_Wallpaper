@@ -23,6 +23,7 @@ Window {
     property int cfgMultiMonitorMode: 0
     property int cfgLayer: 0 // 0: LayerBackground, 1: LayerBottom
     property int cfgSpeed: 5
+    property int cfgFps: 30
     property real cfgLogoSize: 300
     property color cfgBackgroundColor: "#140b00"
     property string cfgBackgroundImage: ""
@@ -80,6 +81,7 @@ Window {
             DvdEngine.logoWidth = actualLogoWidth;
             DvdEngine.logoHeight = actualLogoHeight;
             DvdEngine.speed = cfgSpeed;
+            DvdEngine.targetFps = cfgFps;
             DvdEngine.colorMode = cfgColorMode;
             DvdEngine.customColor = cfgCustomColor;
             DvdEngine.registerScreen(targetScreenName, screenVirtualX, screenVirtualY, screenVirtualWidth, screenVirtualHeight);
@@ -137,7 +139,8 @@ Window {
             localColor = cfgCustomColor;
         }
 
-        var speedFactor = Math.max(0.2, cfgSpeed / 5.0);
+        var dtFactor = (1000.0 / Math.max(10, cfgFps)) / 16.666;
+        var speedFactor = Math.max(0.2, cfgSpeed / 5.0) * dtFactor;
         var stepX = localVx * speedFactor;
         var stepY = localVy * speedFactor;
 
@@ -223,8 +226,13 @@ Window {
 
     // DVD Logo & Animation Layer (renders UNDER the pixel grid)
     Item {
+        id: logoLayer
         anchors.fill: parent
         clip: true
+        // Only render the animation layer if the logo is on this monitor
+        // or a celebration animation is actively playing.
+        // Static monitors become 100% idle and consume 0 GPU resources!
+        visible: win.isLogoOnScreen || celebrationItem.active
 
         // Motion Trail (Optional)
         Repeater {
@@ -322,7 +330,7 @@ Window {
     }
 
     Timer {
-        interval: 16
+        interval: Math.max(10, Math.round(1000 / win.cfgFps))
         repeat: true
         running: (win.cfgMultiMonitorMode === 1) && !win.isPaused
         onTriggered: win.stepLocalPhysics()

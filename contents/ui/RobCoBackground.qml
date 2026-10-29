@@ -16,6 +16,12 @@ Item {
     property bool showVignette: true
     property real vignetteIntensity: 0.85
 
+    // Optimize: Cache the entire static scanline & vignette overlay into a single GPU texture.
+    // Prevents redrawing hundreds of thousands of tiled scanline quads and 4 full-screen
+    // alpha-blended gradient rectangles every single frame!
+    layer.enabled: true
+    layer.smooth: false
+
     // Base RobCo Amber Terminal Background (only when standalone preview requested)
     Rectangle {
         anchors.fill: parent

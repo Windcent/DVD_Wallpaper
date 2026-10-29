@@ -16,6 +16,11 @@
       <default>5</default>
     </entry>
 
+    <entry name="TargetFps" type="int">
+      <label>Target framerate (30 for ultra-low GPU power saver, 60 for smooth)</label>
+      <default>30</default>
+    </entry>
+
     <entry name="LogoSize" type="int">
       <label>Logo width in pixels</label>
       <default>300</default>

@@ -12,6 +12,7 @@ WallpaperItem {
     // --- Configuration properties from KConfig ---
     readonly property int cfgMultiMonitorMode: root.configuration ? root.configuration.MultiMonitorMode : 0
     readonly property int cfgSpeed: root.configuration ? root.configuration.Speed : 5
+    readonly property int cfgFps: root.configuration ? (root.configuration.TargetFps || 30) : 30
     readonly property int cfgLogoSize: root.configuration ? root.configuration.LogoSize : 300
     readonly property color cfgBackgroundColor: root.configuration ? root.configuration.BackgroundColor : "#000000"
     readonly property string cfgBackgroundImage: root.configuration ? root.configuration.BackgroundImage : ""
@@ -111,7 +112,8 @@ WallpaperItem {
             localColor = cfgCustomColor;
         }
 
-        var speedFactor = Math.max(0.2, cfgSpeed / 5.0);
+        var dtFactor = (1000.0 / Math.max(10, cfgFps)) / 16.666;
+        var speedFactor = Math.max(0.2, cfgSpeed / 5.0) * dtFactor;
         var stepX = localVx * speedFactor;
         var stepY = localVy * speedFactor;
 
@@ -226,6 +228,7 @@ WallpaperItem {
         id: screenCanvas
         anchors.fill: parent
         clip: true
+        visible: root.isLogoOnScreen || celebrationItem.active
 
         // Motion Trail Layers (Optional)
         Repeater {
@@ -326,7 +329,7 @@ WallpaperItem {
     // Independent mode physics timer
     Timer {
         id: localPhysicsTimer
-        interval: 16
+        interval: Math.max(10, Math.round(1000 / cfgFps))
         repeat: true
         running: root.cfgMultiMonitorMode === 1
         onTriggered: root.stepLocalPhysics()
@@ -341,6 +344,7 @@ WallpaperItem {
 
     Component.onCompleted: {
         DvdEngine.speed = cfgSpeed;
+        DvdEngine.targetFps = cfgFps;
         DvdEngine.logoWidth = actualLogoWidth;
         DvdEngine.logoHeight = actualLogoHeight;
         DvdEngine.colorMode = cfgColorMode;

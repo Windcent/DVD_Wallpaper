@@ -6,6 +6,7 @@ import QtQuick
 Item {
     id: root
     anchors.fill: parent
+    visible: root.active
 
     property real originX: 0
     property real originY: 0

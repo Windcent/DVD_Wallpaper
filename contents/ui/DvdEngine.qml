@@ -14,6 +14,8 @@ Item {
     property real logoHeight: 132
     property int colorMode: 0
     property color customColor: "#ffaa00"
+    property int targetFps: 30
+    readonly property int timerInterval: Math.max(10, Math.round(1000 / targetFps))
 
     // --- Simulation State ---
     property real globalX: 300
@@ -194,7 +196,8 @@ Item {
             currentColor = customColor;
         }
 
-        var speedFactor = Math.max(0.2, speed / 5.0);
+        var dtFactor = (1000.0 / Math.max(10, targetFps)) / 16.666;
+        var speedFactor = Math.max(0.2, speed / 5.0) * dtFactor;
         var stepX = velocityX * speedFactor;
         var stepY = velocityY * speedFactor;
 
@@ -251,7 +254,7 @@ Item {
 
     Timer {
         id: physicsTimer
-        interval: 16 // ~60fps
+        interval: engine.timerInterval
         repeat: true
         running: !engine.isPaused
         onTriggered: engine.stepSimulation()

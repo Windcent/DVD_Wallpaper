@@ -350,6 +350,13 @@ class DvdTrayManager:
         if self.dvd_engine:
             self.dvd_engine.setProperty("speed", speed)
 
+    def set_fps(self, fps):
+        self.args.fps = fps
+        for w in self.windows:
+            w.setProperty("cfgFps", fps)
+        if self.dvd_engine:
+            self.dvd_engine.setProperty("targetFps", fps)
+
     def set_size(self, size):
         self.args.size = size
         for w in self.windows:
@@ -510,6 +517,22 @@ class DvdTrayManager:
             a.triggered.connect(lambda checked, s=spd: self.set_speed(s))
             ag_speed.addAction(a)
 
+        # Framerate / Performance
+        fps_menu = self.menu.addMenu("Framerate / GPU")
+        ag_fps = QActionGroup(fps_menu)
+        framerates = [
+            (30, "30 FPS (Power Saver / Low GPU - Default)"),
+            (60, "60 FPS (Smooth)"),
+            (120, "120 FPS (High Refresh Rate)")
+        ]
+        for f, label in framerates:
+            a = fps_menu.addAction(label)
+            a.setCheckable(True)
+            if getattr(self.args, "fps", 30) == f:
+                a.setChecked(True)
+            a.triggered.connect(lambda checked, fps_val=f: self.set_fps(fps_val))
+            ag_fps.addAction(a)
+
         # Logo Size
         size_menu = self.menu.addMenu("Logo Size")
         ag_size = QActionGroup(size_menu)
@@ -652,6 +675,8 @@ def main():
                         help="Multi-monitor mode: 'span' (bounce across all monitors) or 'independent' (one logo per screen)")
     parser.add_argument("--speed", type=int, default=5,
                         help="Movement speed (1 - 20, default: 5)")
+    parser.add_argument("--fps", type=int, choices=[15, 30, 60, 120, 144], default=30,
+                        help="Target framerate: 30 (default power saver) or 60 (smooth)")
     parser.add_argument("--size", type=int, default=300,
                         help="Logo width in pixels (Large: 300, default: 300)")
     parser.add_argument("--transparent", action="store_true", default=False,
@@ -813,7 +838,7 @@ def main():
 
     mode_int = 0 if args.mode == "span" else 1
     print(f"  • Mode: {'Bounce across all monitors (Seamless Spanning)' if mode_int == 0 else 'Independent logo per monitor'}")
-    print(f"  • Speed: {args.speed} | Size: {args.size}px | Glow: {args.glow}")
+    print(f"  • Speed: {args.speed} | FPS: {args.fps} | Size: {args.size}px | Glow: {args.glow}")
 
     windows = []
 
@@ -841,6 +866,7 @@ def main():
         win.setProperty("cfgMultiMonitorMode", mode_int)
         win.setProperty("cfgLayer", layer_mode)
         win.setProperty("cfgSpeed", args.speed)
+        win.setProperty("cfgFps", args.fps)
         win.setProperty("cfgLogoSize", float(args.size))
         win.setProperty("cfgBackgroundType", bg_type)
         win.setProperty("cfgBackgroundColor", bg_color)
