@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2026 Antigravity Pair
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+singleton DvdEngine 1.0 DvdEngine.qml

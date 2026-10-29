@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/Wallpaper",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "user@kde.org",
+                "Name": "KDE Community"
+            }
+        ],
+        "Category": "Fun & Games",
+        "Description": "Classic bouncing DVD logo live wallpaper with seamless multi-monitor bouncing and corner hit celebrations",
+        "Icon": "media-optical-dvd",
+        "Id": "org.kde.plasma.dvdwallpaper",
+        "License": "GPL-2.0-or-later",
+        "Name": "Bouncing DVD Logo",
+        "Version": "1.0.0",
+        "Website": "https://kde.org"
+    },
+    "X-KDE-ParentApp": "org.kde.plasmashell"
+}

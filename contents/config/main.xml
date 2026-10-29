@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <entry name="MultiMonitorMode" type="int">
+      <label>Multi-monitor display mode (0: Span Across Monitors, 1: Independent per Monitor)</label>
+      <default>0</default>
+    </entry>
+
+    <entry name="Speed" type="int">
+      <label>Movement speed</label>
+      <default>5</default>
+    </entry>
+
+    <entry name="LogoSize" type="int">
+      <label>Logo width in pixels</label>
+      <default>300</default>
+    </entry>
+
+    <entry name="BackgroundColor" type="Color">
+      <label>Background color</label>
+      <default>#000000</default>
+    </entry>
+
+    <entry name="BackgroundImage" type="String">
+      <label>Optional background wallpaper image</label>
+      <default></default>
+    </entry>
+
+    <entry name="ColorMode" type="int">
+      <label>Color mode (0: Classic cycling palette, 1: Smooth rainbow, 2: Custom color)</label>
+      <default>0</default>
+    </entry>
+
+    <entry name="CustomColor" type="Color">
+      <label>Custom logo color</label>
+      <default>#00d2ff</default>
+    </entry>
+
+    <entry name="GlowEffect" type="bool">
+      <label>Enable neon glow effect</label>
+      <default>true</default>
+    </entry>
+
+    <entry name="MotionTrail" type="bool">
+      <label>Enable subtle motion trail</label>
+      <default>false</default>
+    </entry>
+
+    <entry name="CornerCelebration" type="bool">
+      <label>Celebrate when hitting exact corner</label>
+      <default>true</default>
+    </entry>
+
+    <entry name="ShowStats" type="bool">
+      <label>Show corner hits and bounce counter stats overlay</label>
+      <default>false</default>
+    </entry>
+
+    <entry name="CustomLogo" type="String">
+      <label>Path to custom logo image or SVG</label>
+      <default></default>
+    </entry>
+  </group>
+</kcfg>
